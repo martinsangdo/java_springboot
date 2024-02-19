@@ -1,15 +1,22 @@
 #find campaign, adgroups having recommendations
 import requests
+from pymongo import MongoClient
+
 #-----
 def query_page(page_index):
     # post_url = "https://apigateway.dolenglish.vn/public/search-transform/api/filter?contentGroup=DICTATION"
-    post_url = 'https://apigateway.dolenglish.vn/public/search-transform/api/filter'  #reading practice
+    # post_url = 'https://apigateway.dolenglish.vn/public/search-transform/api/filter'  #reading practice
+    post_url = 'https://apigateway.dolenglish.vn/public/search-transform/api/filter/samples'  #writing practice
+
     json_data = {
         "query": "",
         "filters": {
             "all": [
                 {
-                    "content_group": "PRACTICE_PASSAGE"
+                    "content_group": "WRITING"
+                },
+                {
+                    "type": "WRITING_TASK_2_ACADEMIC"
                 }
             ]
         },
@@ -19,19 +26,27 @@ def query_page(page_index):
                     "type": "value"
                 }
             ],
-            "displayed_question_type": [
+            "chart_type": [
                 {
                     "type": "value"
                 }
-            ]
+            ],
+                    "year": [
+                        {
+                            "type": "value"
+                        }
+                    ]
         },
         "page": {
             "current": page_index,
-            "size": 15
+            "size": 9
         },
         "sort": [
             {
-                "ordering": "desc"
+                "year_quarter": "desc"
+            },
+            {
+                "created_at": "desc"
             }
         ]
     }
@@ -41,23 +56,18 @@ def query_page(page_index):
     # print(list)
     return list
 #-------
+client = MongoClient('localhost:27017')
+db_client = client['martin_projects']['ielts_writing_task_2']
+
 ids = []
-for page_index in range(14, 20):
+for page_index in range(1, 37):
     list = query_page(page_index)
     for item in list:
-        ids.append(item['id']['raw'])
+        link = 'https://tuhocielts.dolenglish.vn/' + item['url']['raw']
+        record = db_client.find_one({'link':link, 'is_done':{'$ne': True}})
+        if record is None:
+            #not existed
+            print(link)
+        # else:
+        #     print('existed: ' + link)
 
-# print(ids)
-str_ids = ','.join(ids)
-# print(str_ids)
-# get_url = 'https://apigateway.dolenglish.vn/public/page-management/api/dictations/overview?ids='+str_ids+'&size='+str(len(ids))
-title_index = 1
-
-for id in ids:
-    get_url = 'https://apigateway.dolenglish.vn/public/page-management/api/page/tests/PRACTICE_TEST/'+id #reading
-    r = requests.get(get_url)
-    item = r.json()
-    # list = r.json()['content']
-    # for item in list:
-    print('https://tuhocielts.dolenglish.vn/' + item['pages'][0]['url'] + ' ('+str(title_index)+')')
-    title_index = title_index + 1
