@@ -5,14 +5,19 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from pymongo import MongoClient
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = "1ePt1lbCJuXXRr2M-7LKEorHz6FYxCpGORTppAZNob6w"
-SAMPLE_RANGE_NAME = "writing!A1:B4"  #tab name & range
 
+TAB_NAMES = ["writing", "collocation", "vocabulary", "sentences", "idioms", "uncommon"]
+DATA_RANGE = "!A1:B10000"
+# SAMPLE_RANGE_NAME = "writing!A1:B4"  #tab name & range
+
+#================================================
 def main():
     """Shows basic usage of the Sheets API.
     Prints values from a sample spreadsheet.
@@ -38,27 +43,76 @@ def main():
 
     try:
         service = build("sheets", "v4", credentials=creds)
-
+        #
+        client = MongoClient('localhost:27017')
+        db_client = client['martin_projects']['vocabulary']
+        db_client.delete_many({})
         # Call the Sheets API
         sheet = service.spreadsheets()
-        result = (
-            sheet.values()
-            .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME)
-            .execute()
-        )
-        values = result.get("values", [])
-
-        if not values:
-            print("No data found.")
-            return
-
-        print("Name, Major:")
-        for row in values:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print(f"{row[0]}, {row[1]}")
+        #scan through all tabs
+        for tab in TAB_NAMES:
+            print('parsing tab: ' + tab)
+            rows = []
+            range_ = tab + DATA_RANGE
+            result = (
+                sheet.values()
+                .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=range_)
+                .execute()
+            )
+            rows = result.get("values", [])
+            save_db(db_client, tab, rows)
     except HttpError as err:
         print(err)
-
-
+#================================================
+def save_db(db_client, tab, rows):
+    #clear entire collection
+    print('saving tab: ' + tab + ' with row total: ' + str(len(rows)))
+    #insert data
+    row = 0
+    for row_data in rows:
+        if(len(row_data) > 0):
+            #this row has values
+            for col in [0, 1]:   #there are only 2 columns
+                if col < len(row_data):
+                    item = {
+                        'vi': '',
+                        'en': ''
+                    }
+                    has_data = split_words(row_data[col], item)
+                    if (has_data):
+                        detail = {
+                            'tab': tab,
+                            'col': col,
+                            'row': row,
+                            'vi': item['vi'].strip(),
+                            'en': item['en'].strip()
+                        }
+                        add_words(db_client, detail)
+        row = row + 1
+#================================================
+def split_words(word, item):
+    has_data = False
+    words = word.split(':')
+    if (len(words) == 1 and words[0] != ''):
+        #no english
+        item['vi'] = words[0]
+        item['en'] = ''
+        has_data = True
+    if (len(words) == 2):
+        item['vi'] = words[0]
+        item['en'] = words[1]
+        has_data = True
+    if (len(words) > 2):
+        item['vi'] = words[0]
+        item['en'] = ''
+        has_data = True
+        for idx in [1 , len(words)-1]:
+            item['en'] = item['en'] + ' ' + words[idx]
+    return has_data
+#================================================
+#upsert movie detail
+def add_words(db_client, detail):
+    db_client.insert_one(detail)
+#================================================
 if __name__ == "__main__":
     main()

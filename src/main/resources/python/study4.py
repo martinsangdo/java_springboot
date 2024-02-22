@@ -18,6 +18,6 @@ def parse_page(page_index):
         # print tag.text_content()
         print("https://study4.com" + tag.attrib['href'])
 #######################
-for x in range(1,8):
+for x in range(1,20):
     parse_page(x)
 
