@@ -45,7 +45,7 @@ def main():
         service = build("sheets", "v4", credentials=creds)
         #
         client = MongoClient('localhost:27017')
-        db_client = client['martin_projects']['vocabulary']
+        db_client = client['vndating']['vocabulary']
         db_client.delete_many({})
         # Call the Sheets API
         sheet = service.spreadsheets()
