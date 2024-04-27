@@ -20,3 +20,11 @@ The following guides illustrate how to use some features concretely:
 * [Accessing Data with MongoDB](https://spring.io/guides/gs/accessing-data-mongodb/)
 * [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
 
+
+### Common errors when init new project
+1. This application has no explicit mapping for /error, so you are seeing this as a fallback.
+   Add the file "error.html" into resources/templates
+    Add annotation @SpringBootApplication
+    More main java file to be same folder of controller package
+    Add default port to application.properties
+2. 
