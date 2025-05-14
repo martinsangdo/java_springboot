@@ -1,4 +1,4 @@
-package com.firstdata.martin_dataanalytic;
+package com.firstdata.main_pack;
 
 import lombok.Value;
 import org.springframework.core.Ordered;
