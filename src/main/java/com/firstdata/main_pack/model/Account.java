@@ -1,19 +1,17 @@
 package com.firstdata.main_pack.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
-// import lombok.Data;
-
-@Entity
+@Document
 @Data
-@Table(name = "tblDepartments")
+@Table(name = "tb_account")
 public class Account {
-    @Id
-    Long id;
+    // @Id
+    // Long id;
     String name;
     String email;
 }

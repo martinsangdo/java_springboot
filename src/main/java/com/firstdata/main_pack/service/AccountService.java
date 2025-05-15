@@ -15,4 +15,12 @@ public class AccountService {
         Account db = accountRepository.findByName(name);
         return db;
     }
+
+    public Account createNewAccount(String name, String email){
+        Account db = new Account();
+        db.setEmail(email);
+        db.setName(name);
+        accountRepository.save(db);
+        return db;
+    }
 }
