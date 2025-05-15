@@ -9,7 +9,7 @@ This is the RESTful controller to get/set data to database
 @RequestMapping("/api/house")
 public class HouseController {
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    public String hello(@RequestParam(value = "name") String name) {
+    public String hello(@RequestParam(value = "name", required = false) String name) {
         return "Hello "+ name;
     }
 }
