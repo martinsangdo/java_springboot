@@ -3,11 +3,11 @@ package com.firstdata.main_pack.controller;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,17 +20,17 @@ public class AccountController {
     AccountService accountService;
 
     @GetMapping("/api/account/name")
-    public String getAccountByName(@RequestParam String keyword){
+    public ResponseEntity<Account> getAccountByName(@RequestParam String keyword){
         Account ac = accountService.findAnyAccountByName(keyword);
         if (Objects.nonNull(ac)){
-            return ac.getName();
+            return new ResponseEntity<>(ac, HttpStatus.OK);
         }
-        return "";
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/api/account/name")
-    public Account createNewAccount(@RequestBody Account body){
+    public ResponseEntity<Account> createNewAccount(@RequestBody Account body){
         Account savedAc = accountService.createNewAccount(body.getName(), body.getEmail());
-        return savedAc;
+        return new ResponseEntity<>(savedAc, HttpStatus.OK);
     }
 }
