@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -71,6 +72,24 @@ public class DemoController {
         @RequestBody Object productDetail
     ){
         System.out.println("Body data: " + productDetail.toString());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/order/detail")
+    public ResponseEntity deleteOrder(
+        @RequestParam String id
+    ){
+        System.out.println("Id value: " + id);
+
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/orders/detail/body")
+    public ResponseEntity deleteOrdersFromBody(
+        @RequestBody Object ids
+    ){
+        System.out.println("Body data: " + ids.toString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
