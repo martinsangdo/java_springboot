@@ -19,20 +19,20 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("/api/account/name")
-    public ResponseEntity<Account> getAccountByName(@RequestParam String keyword){
-        Account ac = accountService.findAnyAccountByName(keyword);
-        if (Objects.nonNull(ac)){
-            return new ResponseEntity<>(ac, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    }
+    // @GetMapping("/api/account/name")
+    // public ResponseEntity<Account> getAccountByName(@RequestParam String keyword){
+    //     Account ac = accountService.findAnyAccountByName(keyword);
+    //     if (Objects.nonNull(ac)){
+    //         return new ResponseEntity<>(ac, HttpStatus.OK);
+    //     }
+    //     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    // }
 
-    @PostMapping("/api/account/name")
-    public ResponseEntity<Account> createNewAccount(@RequestBody Account body){
-        Account savedAc = accountService.createNewAccount(body.getName(), body.getEmail());
-        return new ResponseEntity<>(savedAc, HttpStatus.OK);
-    }
+    // @PostMapping("/api/account/name")
+    // public ResponseEntity<Account> createNewAccount(@RequestBody Account body){
+    //     Account savedAc = accountService.createNewAccount(body.getName(), body.getEmail());
+    //     return new ResponseEntity<>(savedAc, HttpStatus.OK);
+    // }
     /*
      * 
      * import org.springframework.http.HttpStatus;
