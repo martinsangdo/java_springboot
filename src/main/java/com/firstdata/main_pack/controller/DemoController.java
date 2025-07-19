@@ -3,11 +3,14 @@ package com.firstdata.main_pack.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +18,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.firstdata.main_pack.service.AccountService;
+import com.firstdata.main_pack.service.MailService;
 
 @RestController
 public class DemoController {
+    @Autowired
+    MailService mailService;
+
+    @PostMapping("/api/account/sendEmail")
+    public ResponseEntity<String> sendEmail(
+        @RequestParam String receiverEmail,
+        @RequestParam String subject,
+        @RequestParam String text
+    ){
+        String result = mailService.sendEmail(receiverEmail, subject, text);
+        return new ResponseEntity<String>(result, HttpStatus.);
+    }
+
     @Autowired
     AccountService accountService;
 
@@ -123,4 +140,12 @@ public class DemoController {
     //     Boolean isValidEmail = accountService.validEmailFormat(emailAddress);
     //     return new ResponseEntity<>(isValidEmail, HttpStatus.OK);
     // }
+
+    @GetMapping("/product/{id}/detail")
+    public ResponseEntity<String> getProductByIdFromPath(
+        @PathVariable String id
+    ){
+        System.out.println("Id value: " + id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
 }
