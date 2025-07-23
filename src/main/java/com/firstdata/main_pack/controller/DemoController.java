@@ -1,7 +1,6 @@
 package com.firstdata.main_pack.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,11 +80,10 @@ public class DemoController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity getAllProducts(){
-        List<String> productNames = new ArrayList<>();
-        productNames.add("Samsung");
+    public ResponseEntity getAllProducts(@RequestHeader Map<String, String> headers){
+        System.out.println(headers);
 
-        return new ResponseEntity<>(productNames, HttpStatus.OK);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
     @GetMapping("/product/detail")
