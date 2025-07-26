@@ -1,5 +1,9 @@
 package com.firstdata.main_pack.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.firstdata.main_pack.model.Account;
 import com.firstdata.main_pack.service.AccountService;
@@ -170,5 +175,32 @@ public class DemoController {
     ){
         System.out.println("Id value: " + id);
         return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping("/product/upload_image")
+    public ResponseEntity<String> uploadProductImage(
+        @RequestParam("file") MultipartFile file
+    ){
+        final String UPLOAD_DIR = "src/main/resources/static/uploads/"; // Or /public/, /resources/, etc.
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Missing file", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            // Create the directory if it doesn't exist
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Save the file
+            Path filePath = uploadPath.resolve(file.getOriginalFilename());
+            Files.copy(file.getInputStream(), filePath);
+
+            return new ResponseEntity<>(filePath.toUri().toString(), HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
