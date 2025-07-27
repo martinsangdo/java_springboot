@@ -34,6 +34,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.firstdata.main_pack.model.Account;
+import com.firstdata.main_pack.model.Product;
 import com.firstdata.main_pack.service.AccountService;
 import com.firstdata.main_pack.service.ExternalApiService;
 import com.firstdata.main_pack.service.MailService;
@@ -245,5 +246,18 @@ public class DemoController {
         context.setVariable("myList", aList);
         //
         return templateEngine.process("product_management/list", context);
+    }
+
+    @GetMapping(value = "/product/list_view_2", produces = MediaType.TEXT_HTML_VALUE)
+    public String showListView2() {
+        Context context = new Context();    //thymeleaf context package
+        //create a list
+        List<Product> aList = new ArrayList<>();
+        aList.add(new Product(1, "Paper HP", 67.9));
+        aList.add(new Product(2, "Monitor Dell", 73.8));
+        aList.add(new Product(3, "Keyboard Mac", 122.0));
+        context.setVariable("productList", aList);
+        //
+        return templateEngine.process("product_management/list_2", context);
     }
 }
