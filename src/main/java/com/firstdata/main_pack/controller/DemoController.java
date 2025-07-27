@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.firstdata.main_pack.model.Account;
 import com.firstdata.main_pack.service.AccountService;
+import com.firstdata.main_pack.service.ExternalApiService;
 import com.firstdata.main_pack.service.MailService;
 
 @RestController
@@ -38,6 +41,8 @@ import com.firstdata.main_pack.service.MailService;
 public class DemoController {
     @Autowired
     MailService mailService;
+    @Autowired
+    ExternalApiService externalApiService;
 
     @PostMapping("/api/form/fill")
     public ResponseEntity<List> fillTheForm(
@@ -201,6 +206,16 @@ public class DemoController {
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/product/list")
+    public ResponseEntity<JsonNode> getProductList() {
+        try {
+            JsonNode data = externalApiService.fetchDataFromExternalApi("");
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 }
