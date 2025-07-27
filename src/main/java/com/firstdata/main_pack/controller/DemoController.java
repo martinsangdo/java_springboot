@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.firstdata.main_pack.model.Account;
@@ -43,6 +46,10 @@ public class DemoController {
     MailService mailService;
     @Autowired
     ExternalApiService externalApiService;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine; // Inject Thymeleaf's template engine
+
 
     @PostMapping("/api/form/fill")
     public ResponseEntity<List> fillTheForm(
@@ -212,10 +219,16 @@ public class DemoController {
     @GetMapping("/product/list")
     public ResponseEntity<JsonNode> getProductList() {
         try {
-            JsonNode data = externalApiService.fetchDataFromExternalApi("");
+            JsonNode data = externalApiService.fetchDataFromExternalApi("https://dummyjson.com/products");
             return new ResponseEntity<>(data, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "/product/detail_page", produces = MediaType.TEXT_HTML_VALUE)
+    public String showProductDetails() {
+        Context context = new Context();    //thymeleaf context package
+        return templateEngine.process("product_management/product_detail", context);
     }
 }
