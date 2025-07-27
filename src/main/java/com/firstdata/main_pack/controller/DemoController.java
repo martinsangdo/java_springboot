@@ -229,6 +229,7 @@ public class DemoController {
     @GetMapping(value = "/product/detail_page", produces = MediaType.TEXT_HTML_VALUE)
     public String showProductDetails() {
         Context context = new Context();    //thymeleaf context package
+        context.setVariable("productName", "Marshall speaker 111");
         return templateEngine.process("product_management/product_detail", context);
     }
 }
