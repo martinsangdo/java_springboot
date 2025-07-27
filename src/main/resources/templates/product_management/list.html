@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>List</title>
+</head>
+<body>
+    <div>My list will display as below:</div>
+    <ul th:if="${not #lists.isEmpty(myList)}">
+        <li th:each="item : ${myList}" th:text="${item}"></li>
+    </ul>
+</body>
+</html>

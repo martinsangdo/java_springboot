@@ -232,4 +232,18 @@ public class DemoController {
         context.setVariable("productName", "Marshall speaker 111");
         return templateEngine.process("product_management/product_detail", context);
     }
+
+    @GetMapping(value = "/product/list_view", produces = MediaType.TEXT_HTML_VALUE)
+    public String showListView() {
+        Context context = new Context();    //thymeleaf context package
+        //create a list
+        List<String> aList = new ArrayList<>();
+        aList.add("Superior Sound Quality");
+        aList.add("Long Battery Life");
+        aList.add("Bluetooth 5.0 Connectivity");
+        aList.add("Portable Design");
+        context.setVariable("myList", aList);
+        //
+        return templateEngine.process("product_management/list", context);
+    }
 }
