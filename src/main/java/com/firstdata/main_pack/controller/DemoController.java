@@ -260,4 +260,15 @@ public class DemoController {
         //
         return templateEngine.process("product_management/list_2", context);
     }
+    @GetMapping(value = "/product/add_product_view", produces = MediaType.TEXT_HTML_VALUE)
+    public String showProductAddPage() {
+        Context context = new Context();    //thymeleaf context package
+        return templateEngine.process("product_management/add_product", context);
+    }
+
+    @PostMapping(value = "/product/add_product")
+    public ResponseEntity<String> processAddData(@RequestBody Object dataParams) {
+        System.out.println(dataParams);
+        return new ResponseEntity<>("Data is received", HttpStatus.OK);
+    }
 }
