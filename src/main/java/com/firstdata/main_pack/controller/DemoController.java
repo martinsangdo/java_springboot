@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,7 +40,7 @@ import com.firstdata.main_pack.service.MailService;
 
 @RestController
 @Validated
-@RequestMapping("/api/demo/")
+// @RequestMapping("/api/demo/")
 public class DemoController {
     @Autowired
     MailService mailService;
@@ -270,5 +269,11 @@ public class DemoController {
     public ResponseEntity<String> processAddData(@RequestBody Object dataParams) {
         System.out.println(dataParams);
         return new ResponseEntity<>("Data is received", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/home", produces = MediaType.TEXT_HTML_VALUE)
+    public String showHomepageOrgani() {
+        Context context = new Context();    //thymeleaf context package
+        return templateEngine.process("ogani-master/index", context);
     }
 }
