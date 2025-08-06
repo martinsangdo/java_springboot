@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +49,11 @@ public class DemoController {
     @Autowired
     private SpringTemplateEngine templateEngine; // Inject Thymeleaf's template engine
 
+    @GetMapping("/demo/hello")
+    public ResponseEntity<String> displayHelloMe(@RequestParam String name){
+        String aString = "Hello " + name;
+        return new ResponseEntity<>(aString, HttpStatus.OK);
+    }
 
     @PostMapping("/api/form/fill")
     public ResponseEntity<List> fillTheForm(
