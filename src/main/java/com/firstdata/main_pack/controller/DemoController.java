@@ -276,4 +276,10 @@ public class DemoController {
         Context context = new Context();    //thymeleaf context package
         return templateEngine.process("ogani-master/index", context);
     }
+
+    @GetMapping(value = "/shopping-cart", produces = MediaType.TEXT_HTML_VALUE)
+    public String showShoppingCart() {
+        Context context = new Context();    //thymeleaf context package
+        return templateEngine.process("ogani-master/shoping-cart", context);
+    }
 }
