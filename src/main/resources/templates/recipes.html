@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .ingredients-list {
+            padding-left: 20px;
+        }
+        .ingredients-list li {
+            margin-bottom: 4px;
+        }
+        .recipe-image {
+            max-width: 150px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .rating {
+            font-weight: bold;
+            color: #ff9800; /* A nice star-like color */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Recipe Catalog</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Ingredients</th>
+                <th>Image</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Classic Margherita Pizza</td>
+                <td>
+                    <ul class="ingredients-list">
+                        <li>Pizza dough</li>
+                        <li>Tomato sauce</li>
+                        <li>Fresh mozzarella cheese</li>
+                        <li>Fresh basil leaves</li>
+                        <li>Olive oil</li>
+                    </ul>
+                </td>
+                <td>
+                    <img src="https://cdn.dummyjson.com/recipe-images/1.webp" alt="Spaghetti Bolognese" class="recipe-image">
+                </td>
+                <td><span class="rating">4.6</span> / 5</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Vegetarian Stir-Fry</td>
+                <td>
+                    <ul class="ingredients-list">
+                        <li>Tofu, cubed</li>
+                        <li>Broccoli florets</li>
+                        <li>Carrots, sliced</li>
+                        <li>Bell peppers, sliced</li>
+                        <li>Soy sauce</li>
+                    </ul>
+                </td>
+                <td>
+                    <img src="https://cdn.dummyjson.com/recipe-images/2.webp" alt="Chicken Curry" class="recipe-image">
+                </td>
+                <td><span class="rating">4.7</span> / 5</td>
+            </tr>
+            <tr>
+                <td>103</td>
+                <td>Vegetable Stir-fry</td>
+                <td>
+                    <ul class="ingredients-list">
+                        <li>Broccoli</li>
+                        <li>Bell peppers</li>
+                        <li>Soy sauce</li>
+                        <li>Ginger</li>
+                        <li>Noodles</li>
+                    </ul>
+                </td>
+                <td>
+                    <img src="https://via.placeholder.com/150" alt="Vegetable Stir-fry" class="recipe-image">
+                </td>
+                <td><span class="rating">4.2</span> / 5</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
