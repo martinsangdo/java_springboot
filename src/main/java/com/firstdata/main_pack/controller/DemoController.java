@@ -301,7 +301,7 @@ public class DemoController {
         employee1.put("name", "Alice");
         employee1.put("email", "alice.smith@example.com");
         employee1.put("department", "HR");
-        employee1.put("salary", 7000);
+        employee1.put("salary", 4300);
         EMPLOYERS.add(employee1);
         //Employee 2
         HashMap<String, Object> employee2 = new HashMap<>();
@@ -332,6 +332,14 @@ public class DemoController {
 
         //
         return new ResponseEntity<List<HashMap<String, Object>>>(results, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/employee/update")
+    public ResponseEntity<HashMap<String, Object>> changeEmployeeInfo(@RequestBody Object newData){
+        List<HashMap<String, Object>> employees = getData();
+        //todo
+        //
+        return new ResponseEntity<HashMap<String, Object>>(employees.get(0), HttpStatus.OK);
     }
 
 }
