@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.firstdata.main_pack.model.Account;
 import com.firstdata.main_pack.model.Product;
 import com.firstdata.main_pack.service.AccountService;
+import com.firstdata.main_pack.service.EmployeeService;
 import com.firstdata.main_pack.service.ExternalApiService;
 import com.firstdata.main_pack.service.MailService;
 
@@ -319,18 +320,13 @@ public class DemoController {
         EMPLOYERS.add(employee3);
         return EMPLOYERS;
     }
+    @Autowired
+    EmployeeService employeeService;
+
     @GetMapping("/api/search_employees")
     public ResponseEntity<List<HashMap<String, Object>>> searchEmployees(@RequestParam String keyword){
         List<HashMap<String, Object>> employees = getData();
-        List<HashMap<String, Object>> results = new ArrayList<>();
-        //todo: các bạn hiện thực để tìm dữ liệu trong data và trả về kết quả
-        for (HashMap<String, Object> employee : employees){
-            if (String.valueOf(employee.get("name")).toLowerCase().contains(keyword.toLowerCase())){
-                results.add(employee);
-            }
-        }
-
-        //
+        List<HashMap<String, Object>> results = employeeService.searchEmployees(employees, keyword);
         return new ResponseEntity<List<HashMap<String, Object>>>(results, HttpStatus.OK);
     }
 
@@ -341,5 +337,4 @@ public class DemoController {
         //
         return new ResponseEntity<HashMap<String, Object>>(employees.get(0), HttpStatus.OK);
     }
-
 }
