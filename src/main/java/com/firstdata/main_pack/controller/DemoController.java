@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,12 @@ public class DemoController {
 
     @GetMapping("/demo/hello")
     public ResponseEntity<String> displayHelloMe(@RequestParam String name){
+        String aString = "Hello " + name;
+        return new ResponseEntity<>(aString, HttpStatus.OK);
+    }
+
+    @GetMapping("/demo/hello2")
+    public ResponseEntity<String> displayHelloMeInPage(@RequestParam String name){
         String aString = "Hello " + name;
         return new ResponseEntity<>(aString, HttpStatus.OK);
     }
@@ -286,4 +293,45 @@ public class DemoController {
         Context context = new Context();    //thymeleaf context package
         return templateEngine.process("ogani-master/shoping-cart", context);
     }
+
+    public List<HashMap<String, Object>> getData(){
+        List<HashMap<String, Object>> EMPLOYERS = new ArrayList<>();
+        //Employee 1
+        HashMap<String, Object> employee1 = new HashMap<>();
+        employee1.put("name", "Alice");
+        employee1.put("email", "alice.smith@example.com");
+        employee1.put("department", "HR");
+        employee1.put("salary", 7000);
+        EMPLOYERS.add(employee1);
+        //Employee 2
+        HashMap<String, Object> employee2 = new HashMap<>();
+        employee2.put("name", "Johnson");
+        employee2.put("email", "js.me@gmail.com");
+        employee2.put("department", "HR");
+        employee2.put("salary", 5000);
+        EMPLOYERS.add(employee2);
+        //Employee 3
+        HashMap<String, Object> employee3 = new HashMap<>();
+        employee3.put("name", "Bob");
+        employee3.put("email", "bod.dylan@dylan.com");
+        employee3.put("department", "IT");
+        employee3.put("salary", 3000);
+        EMPLOYERS.add(employee3);
+        return EMPLOYERS;
+    }
+    @GetMapping("/api/search_employees")
+    public ResponseEntity<List<HashMap<String, Object>>> searchEmployees(@RequestParam String keyword){
+        List<HashMap<String, Object>> employees = getData();
+        List<HashMap<String, Object>> results = new ArrayList<>();
+        //todo: các bạn hiện thực để tìm dữ liệu trong data và trả về kết quả
+        for (HashMap<String, Object> employee : employees){
+            if (String.valueOf(employee.get("name")).toLowerCase().contains(keyword.toLowerCase())){
+                results.add(employee);
+            }
+        }
+
+        //
+        return new ResponseEntity<List<HashMap<String, Object>>>(results, HttpStatus.OK);
+    }
+
 }
