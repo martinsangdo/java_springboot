@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +49,7 @@ public class DemoController {
     @Autowired
     ExternalApiService externalApiService;
 
-    @Autowired
-    private SpringTemplateEngine templateEngine; // Inject Thymeleaf's template engine
+    
 
     @GetMapping("/demo/hello")
     public ResponseEntity<String> displayHelloMe(@RequestParam String name){
@@ -214,12 +214,13 @@ public class DemoController {
             // Create the directory if it doesn't exist
             Path uploadPath = Paths.get(UPLOAD_DIR);
             if (!Files.exists(uploadPath)) {
+                System.out.println("Begin creating new folder");
                 Files.createDirectories(uploadPath);
             }
 
             // Save the file
             Path filePath = uploadPath.resolve(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), filePath);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             return new ResponseEntity<>(filePath.toUri().toString(), HttpStatus.OK);
         } catch (IOException e) {
@@ -238,10 +239,22 @@ public class DemoController {
         }
     }
 
-    @GetMapping(value = "/product/detail_page", produces = MediaType.TEXT_HTML_VALUE)
-    public String showProductDetails() {
+    @Autowired
+    private SpringTemplateEngine templateEngine; // Inject Thymeleaf's template engine
+    @GetMapping(value = "/product/detail_page/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public String showProductDetails(@PathVariable String id) {
         Context context = new Context();    //thymeleaf context package
-        context.setVariable("productName", "Marshall speaker 111");
+        //1. get data from https://dummyjson.com/products/...
+        try {
+            JsonNode data = externalApiService.fetchDataFromExternalApi("https://dummyjson.com/products/" + id);
+            //2. display product detail to the page
+            context.setVariable("productName", data.get("title").asText());
+            context.setVariable("price", data.get("price"));
+            context.setVariable("description", data.get("description").asText());
+            context.setVariable("thumbnail", data.get("thumbnail").asText());
+        } catch (Exception e){
+
+        }
         return templateEngine.process("product_management/product_detail", context);
     }
 
