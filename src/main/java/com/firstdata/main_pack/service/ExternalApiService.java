@@ -17,10 +17,11 @@ public class ExternalApiService {
     public ExternalApiService() {
         this.httpClient = HttpClient.newHttpClient();
     }
+    //send GET requests to another url
     public JsonNode fetchDataFromExternalApi(String url) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .GET()
+                .GET()  
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

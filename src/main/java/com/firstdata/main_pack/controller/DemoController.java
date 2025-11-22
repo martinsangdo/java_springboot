@@ -350,4 +350,14 @@ public class DemoController {
         //
         return new ResponseEntity<HashMap<String, Object>>(employees.get(0), HttpStatus.OK);
     }
+
+
+    @GetMapping(value="/test/hello_page", produces = MediaType.TEXT_HTML_VALUE)
+    public String showTestHello() {
+        Context context = new Context();
+        context.setVariable("myName", "Sang");
+        context.setVariable("myLocation", "HCM");
+        context.setVariable("myImageSrc", "https://i1-kinhdoanh.vnecdn.net/2025/11/22/go-1763696572-1763696597-17636-7080-7030-1763746198.jpg?w=300&h=180&q=100&dpr=2&fit=crop&s=RT2sF9zcT1YtHKP2UY3mSw");
+        return templateEngine.process("hello", context);
+    } 
 }
